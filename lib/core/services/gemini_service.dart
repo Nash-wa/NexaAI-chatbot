@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:logging/logging.dart';
 
 class GeminiService {
   final Dio dio = Dio();
+  static final Logger _logger = Logger('GeminiService');
 
   Future<String> sendMessage(String message) async {
     try {
@@ -26,9 +28,9 @@ class GeminiService {
 
       return text;
     } catch (e) {
-      print("Gemini API Error: $e");
+      _logger.severe('Gemini API Error: $e');
       if (e is DioException) {
-        print("DioError response: ${e.response?.data}");
+        _logger.severe('DioError response: ${e.response?.data}');
         return "Error: ${e.message}\nResponse: ${e.response?.data}";
       }
       return "Error fetching AI response: $e";
