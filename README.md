@@ -1,4 +1,4 @@
-# NexaAI Chatbot 🚀
+# NexaAI Chatbot 
 
 Production-grade Flutter AI chatbot powered by Gemini API.
 
