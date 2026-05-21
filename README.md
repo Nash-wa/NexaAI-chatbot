@@ -49,7 +49,3 @@ Create `.env`
 ```env
 GEMINI_API_KEY=YOUR_API_KEY
 ```
-
-## Developer
-Nashwa S P  
-Flutter Developer — Team Omega | ProjectX
