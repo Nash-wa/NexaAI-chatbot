@@ -1,0 +1,43 @@
+name: nexa_ai
+description: A production-grade Clean Architecture AI Chatbot and Maps training application.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+
+  # Networking & Environment Vars
+  dio: ^5.4.3
+  flutter_dotenv: ^5.1.0
+
+  # Routing & Responsive UI
+  go_router: ^14.2.0
+  flutter_screenutil: ^5.9.0
+
+  # Hardware Services
+  google_maps_flutter: ^2.6.0
+  geolocator: ^11.0.0
+  connectivity_plus: ^6.0.3
+
+  # UI Enhancement & Performance
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
+    - assets/
