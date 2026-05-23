@@ -21,9 +21,8 @@ graph TD
     Repo <-->|3. Delegates to| Service[Gemini Service via Dio - Data]
     Service <-->|4. HTTPS Auth Call| Gemini[Gemini-2.5-Flash Cloud Model]
     
-    subgraph Core Hardware Sensors & Services
+    subgraph Core Network Watcher
         Conn[Connectivity Service] -->|Offline Fallback Event| Provider
-        GPS[Location Service] -->|GPS Coordinates Stream| UI
     end
     
     style UI fill:#1E293B,stroke:#6366F1,stroke-width:2px,color:#fff
@@ -49,8 +48,7 @@ lib/
 │   ├── theme/
 │   │   └── app_theme.dart    # Premium dark palettes (#0F172A slate scaffolds, indigo overlays)
 │   └── services/
-│       ├── gemini_service.dart   # Dio connection manager targeting gemini-2.5-flash
-│       └── location_service.dart # Handles GPS chip telemetry and platform permissions
+│       └── gemini_service.dart   # Dio connection manager targeting gemini-2.5-flash
 │
 └── features/                 # Decoupled business capabilities by feature module
     └── chatbot/              # Modular Chatbot Feature
@@ -85,11 +83,7 @@ lib/
 * Watches active network interfaces dynamically using `connectivity_plus`.
 * If the user goes offline, a beautiful top banner notifies them immediately, and the app seamlessly toggles into **Offline Simulator Mode** to keep dialogues functioning without throwing network exceptions.
 
-### 📍 3. Real-time GPS Telemetry
-* Integrates a hardware GPS locator using `geolocator`.
-* Requests platform permissions safely, and shows coordinates (latitude, longitude, accuracy, and altitude) dynamically on the dashboard.
-
-### 💎 4. Gorgeous Premium UI / UX
+### 💎 3. Gorgeous Premium UI / UX
 * Stunning edge-to-edge layout styling featuring a slate-dark modern color scheme.
 * Dynamic sequential bouncing dot loading animations that replicate live messaging applications.
 * Fluid auto-scroll systems and clean one-tap message clipboard copying.
