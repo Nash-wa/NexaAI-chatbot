@@ -16,6 +16,7 @@ dependencies:
   # Networking & Environment Vars
   dio: ^5.4.3
   flutter_dotenv: ^5.1.0
+  logging: ^1.1.0
 
   # Routing & Responsive UI
   go_router: ^14.2.0

@@ -3,37 +3,68 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
 
 class GeminiService {
-  final Dio dio = Dio();
+  GeminiService([Dio? dio]) : _dio = dio ?? Dio(_defaultOptions);
+
   static final Logger _logger = Logger('GeminiService');
 
-  Future<String> sendMessage(String message) async {
-    try {
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
+  final Dio _dio;
 
-      final response = await dio.post(
+  static BaseOptions get _defaultOptions => BaseOptions(
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 15),
+        headers: const {
+          'Content-Type': 'application/json',
+        },
+      );
+
+  Future<String> sendMessage(String message) async {
+    var apiKey = dotenv.env['GEMINI_API_KEY']?.trim();
+    if (apiKey != null && apiKey.startsWith('"') && apiKey.endsWith('"')) {
+      apiKey = apiKey.substring(1, apiKey.length - 1).trim();
+    }
+
+    if (apiKey == null || apiKey.isEmpty) {
+      throw StateError(
+        'GEMINI_API_KEY is not configured. Add your real key to .env without quotes and restart the app.',
+      );
+    }
+
+    try {
+      final response = await _dio.post(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$apiKey',
         data: {
-          "contents": [
+          'contents': [
             {
-              "parts": [
-                {"text": message}
+              'parts': [
+                {'text': message}
               ]
             }
           ]
         },
       );
 
-      final text = response
-          .data['candidates'][0]['content']['parts'][0]['text'];
+      _logger.info('Status Code: ${response.statusCode}');
+      _logger.info('Response Data: ${response.data}');
 
-      return text;
-    } catch (e) {
-      _logger.severe('Gemini API Error: $e');
-      if (e is DioException) {
-        _logger.severe('DioError response: ${e.response?.data}');
-        return "Error: ${e.message}\nResponse: ${e.response?.data}";
+      final candidate = response.data['candidates']?.first;
+      final content = candidate?['content']?['parts']?.first?['text'];
+
+      if (content is String && content.isNotEmpty) {
+        return content.trim();
       }
-      return "Error fetching AI response: $e";
+
+      throw Exception('Gemini returned an empty response.');
+    } on DioException catch (error, stackTrace) {
+      _logger.severe('DioException Status: ${error.response?.statusCode}');
+      _logger.severe('DioException Data: ${error.response?.data}');
+      _logger.severe('DioException Message: ${error.message}');
+      _logger.severe('Gemini API Error', error, stackTrace);
+      final responseBody = error.response?.data;
+      throw Exception(
+          'Failed to fetch AI response. ${error.message} ${responseBody != null ? '\n$responseBody' : ''}');
+    } catch (error, stackTrace) {
+      _logger.severe('Gemini service failure', error, stackTrace);
+      rethrow;
     }
   }
 }
