@@ -73,17 +73,17 @@ lib/
 
 ---
 
-## 🔥 Key Features & Capabilities
+##  Key Features & Capabilities
 
-### ⚡ 1. Live Gemini 2.5 Flash Integration
+###  1. Live Gemini 2.5 Flash Integration
 * Connects dynamically to the latest generation of Gemini models for instantaneous, low-latency, and highly intelligent AI replies.
 * Uses custom interceptors to parse API errors (such as quota exhaustion) and alerts the user to toggle simulation mode.
 
-### 🌐 2. Reactive Connectivity & Offline Simulator
+###  2. Reactive Connectivity & Offline Simulator
 * Watches active network interfaces dynamically using `connectivity_plus`.
 * If the user goes offline, a beautiful top banner notifies them immediately, and the app seamlessly toggles into **Offline Simulator Mode** to keep dialogues functioning without throwing network exceptions.
 
-### 💎 3. Gorgeous Premium UI / UX
+###  3. Gorgeous Premium UI / UX
 * Stunning edge-to-edge layout styling featuring a slate-dark modern color scheme.
 * Dynamic sequential bouncing dot loading animations that replicate live messaging applications.
 * Fluid auto-scroll systems and clean one-tap message clipboard copying.
@@ -124,3 +124,5 @@ flutter build apk --release
 * The compilation utilizes tree-shaking on icons and assets, compressing the output binary size down to **47.9 MB** (from 145 MB in debug mode).
 * The resulting package will be compiled directly to:
   `build/app/outputs/flutter-apk/app-release.apk`
+  download apk-https://drive.google.com/file/d/1G2tAQI6KaSqh_wXxRQLZXERotHEWheKg/view?usp=drive_link
+
