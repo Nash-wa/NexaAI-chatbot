@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:nexa_ai/core/theme/app_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nexa_ai/features/chatbot/presentation/providers/personality_provider.dart';
+import 'package:nexa_ai/features/chatbot/presentation/widgets/glass_card.dart';
 
-class TypingIndicator extends StatefulWidget {
+class TypingIndicator extends ConsumerStatefulWidget {
   const TypingIndicator({super.key});
 
   @override
-  State<TypingIndicator> createState() => _TypingIndicatorState();
+  ConsumerState<TypingIndicator> createState() => _TypingIndicatorState();
 }
 
-class _TypingIndicatorState extends State<TypingIndicator>
+class _TypingIndicatorState extends ConsumerState<TypingIndicator>
     with TickerProviderStateMixin {
   late List<AnimationController> _controllers;
   late List<Animation<double>> _animations;
@@ -52,48 +54,47 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
   @override
   Widget build(BuildContext context) {
+    final activePersonality = ref.watch(activePersonalityProvider);
+    final accentColor = activePersonality.accentColor;
+
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: AppColors.assistantBubble,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
-            bottomLeft: Radius.circular(4),
-            bottomRight: Radius.circular(18),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha((0.08 * 255).round()),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(3, (index) {
-            return AnimatedBuilder(
-              animation: _controllers[index],
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, _animations[index].value),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                    width: 7.5,
-                    height: 7.5,
-                    decoration: const BoxDecoration(
-                      color: AppColors.secondary,
-                      shape: BoxShape.circle,
+        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+        child: GlassCard(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          borderRadius: 18,
+          borderColor: accentColor.withOpacity(0.25),
+          opacity: 0.08,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(3, (index) {
+              return AnimatedBuilder(
+                animation: _controllers[index],
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, _animations[index].value),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                      width: 7.0,
+                      height: 7.0,
+                      decoration: BoxDecoration(
+                        color: accentColor,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: accentColor.withOpacity(0.5),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          }),
+                  );
+                },
+              );
+            }),
+          ),
         ),
       ),
     );

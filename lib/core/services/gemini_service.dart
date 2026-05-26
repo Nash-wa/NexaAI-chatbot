@@ -17,7 +17,7 @@ class GeminiService {
         },
       );
 
-  Future<String> sendMessage(String message) async {
+  Future<String> sendMessage(String message, {String? systemPrompt}) async {
     var apiKey = dotenv.env['GEMINI_API_KEY']?.trim();
     if (apiKey != null && apiKey.startsWith('"') && apiKey.endsWith('"')) {
       apiKey = apiKey.substring(1, apiKey.length - 1).trim();
@@ -30,17 +30,27 @@ class GeminiService {
     }
 
     try {
+      final requestData = <String, dynamic>{
+        'contents': [
+          {
+            'parts': [
+              {'text': message}
+            ]
+          }
+        ],
+      };
+
+      if (systemPrompt != null && systemPrompt.isNotEmpty) {
+        requestData['systemInstruction'] = {
+          'parts': [
+            {'text': systemPrompt}
+          ]
+        };
+      }
+
       final response = await _dio.post(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$apiKey',
-        data: {
-          'contents': [
-            {
-              'parts': [
-                {'text': message}
-              ]
-            }
-          ]
-        },
+        data: requestData,
       );
 
       _logger.info('Status Code: ${response.statusCode}');

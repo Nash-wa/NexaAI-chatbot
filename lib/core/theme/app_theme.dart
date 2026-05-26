@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static const Color primary = Color(0xFF6E54FF);
-  static const Color secondary = Color(0xFF00D8B3);
-  static const Color surface = Color(0xFF121622);
-  static const Color surfaceVariant = Color(0xFF1F2738);
-  static const Color background = Color(0xFF090B14);
-  static const Color onSurface = Color(0xFFE7E7FF);
-  static const Color userBubble = Color(0xFF3C6FFF);
-  static const Color assistantBubble = Color(0xFF222738);
+  static const Color primary = Color(0xFF6C63FF);       // Nebula Indigo
+  static const Color secondary = Color(0xFF00E5FF);     // Holographic Cyan
+  static const Color accent = Color(0xFFA855F7);        // Aurora Purple
+  static const Color surface = Color(0xFF0F172A);       // Translucent Slate Card Base
+  static const Color surfaceVariant = Color(0xFF1E293B); // Darker Blue Slate
+  static const Color background = Color(0xFF050816);     // Deep Space Cosmic Dark
+  static const Color onSurface = Color(0xFFE2E8F0);      // High-contrast slate white
+  static const Color userBubble = Color(0xFF6C63FF);
+  static const Color assistantBubble = Color(0x14FFFFFF); // Translucent card glass
 }
 
 class AppTheme {

@@ -61,7 +61,7 @@ class ChatController extends StateNotifier<ChatState> {
     state = state.copyWith(messages: const [], errorMessage: null);
   }
 
-  Future<void> sendMessage(String prompt) async {
+  Future<void> sendMessage(String prompt, {String? systemPrompt}) async {
     final trimmedPrompt = prompt.trim();
     if (trimmedPrompt.isEmpty || state.isSending) {
       return;
@@ -81,7 +81,16 @@ class ChatController extends StateNotifier<ChatState> {
     // If in simulation mode, generate a quick simulated response locally
     if (state.isSimulationMode) {
       await Future.delayed(const Duration(milliseconds: 1200)); // Simulate typing latency
-      final response = _generateSimulatedResponse(trimmedPrompt);
+      var response = _generateSimulatedResponse(trimmedPrompt);
+      if (systemPrompt != null && systemPrompt.contains('Captain')) {
+        response = "Crew member, this is **Captain AI**. " + response;
+      } else if (systemPrompt != null && systemPrompt.contains('Motivator')) {
+        response = "VOYAGER! **Motivator Core** is surging! " + response;
+      } else if (systemPrompt != null && systemPrompt.contains('Quirky')) {
+        response = "Bzzt! **Quirky Bot** diagnostic note: " + response;
+      } else if (systemPrompt != null && systemPrompt.contains('Library')) {
+        response = "Archival query complete. " + response;
+      }
       state = state.copyWith(
         messages: [
           ...conversation,
@@ -93,7 +102,7 @@ class ChatController extends StateNotifier<ChatState> {
     }
 
     try {
-      final response = await _repository.sendMessage(trimmedPrompt);
+      final response = await _repository.sendMessage(trimmedPrompt, systemPrompt: systemPrompt);
       state = state.copyWith(
         messages: [
           ...conversation,

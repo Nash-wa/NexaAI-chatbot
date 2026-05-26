@@ -8,7 +8,7 @@ class GeminiChatRepository implements ChatRepository {
   final GeminiService _service;
 
   @override
-  Future<String> sendMessage(String prompt) {
-    return _service.sendMessage(prompt);
+  Future<String> sendMessage(String prompt, {String? systemPrompt}) {
+    return _service.sendMessage(prompt, systemPrompt: systemPrompt);
   }
 }
